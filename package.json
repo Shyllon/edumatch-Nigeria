@@ -1,0 +1,39 @@
+{
+  "name": "edumatch-nigeria",
+  "version": "1.0.0",
+  "description": "EduMatch Nigeria combines educational resources with career guidance in a single accessible platform: Digital Library: Comprehensive learning materials for secondary school subjects, organized by curriculum and grade level. Skill Assessment: AI-powered tests that evaluate students' aptitudes, interests, and strengths. Career Recommendation",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shyllon/edumatch-Nigeria.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shyllon/edumatch-Nigeria/issues"
+  },
+  "homepage": "https://github.com/Shyllon/edumatch-Nigeria#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "mongoose": "^8.12.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^8.0.0",
+    "nodemon": "^3.1.9"
+  }
+}
