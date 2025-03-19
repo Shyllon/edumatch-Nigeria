@@ -1,16 +1,16 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const bcryptjs = require("bcryptjs");
 const redis = require("../config/redisClient");
 
-// ✅ Generate Token
+// Generate Token
 const generateToken = (user) => {
   return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: "7d", // Token expires in 7 days
   });
 };
 
-// 📌 Register User
+// Register User
 exports.registerUser = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -46,7 +46,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// 📌 Login User
+// Login User
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -88,7 +88,7 @@ exports.loginUser = async (req, res) => {
   }
 };
 
-// 📌 Logout User
+// Logout User
 exports.logoutUser = async (req, res) => {
   try {
     const token = req.header("Authorization")?.split(" ")[1];
