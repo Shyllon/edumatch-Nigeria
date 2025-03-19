@@ -13,11 +13,16 @@ dotenv.config();
 connectDB();
 
 // Enable CORS for local development
-app.use(cors({
-  origin: "http://localhost:3000", // Allow React frontend running on port 3000
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // Allow cookies/auth headers
-}));
+app.use(
+  cors({
+    origin: [
+      "https://edumatch-git-main-afolabis-projects-1aa36ae8.vercel.app",
+      "http://localhost:3000",
+    ],
+    methods: "GET, POST, PUT, DELETE",
+    credentials: true, // Allow cookies/auth headers
+  })
+);
 
 // Middleware
 app.use(express.json()); // Parse incoming JSON
