@@ -3,13 +3,12 @@ const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 const redis = require("../config/redisClient");
 
-// Generate Token
+//Generate Token
 const generateToken = (user) => {
   return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: "7d", // Token expires in 7 days
   });
 };
-
 // Register User
 exports.registerUser = async (req, res) => {
   try {
@@ -19,16 +18,14 @@ exports.registerUser = async (req, res) => {
     let user = await User.findOne({ email });
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    // Hash the password
-    const hashedPassword = await bcryptjs.hash(password.trim(), 10);
-
-    // Create and save user
+    //Create user directly (Our MongoDB schema will hash password automatically)
     user = new User({
       name,
       email,
-      password: hashedPassword,
+      password,  
       role,
     });
+
     await user.save();
 
     res.status(201).json({
@@ -46,7 +43,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// Login User
+//User login logic 
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -55,21 +52,19 @@ exports.loginUser = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-    // Debugging Logs
-    console.log("User found:", user);
+    // Double-check password before hashing
+    if (!password || password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
 
-    // Validate password
-    const isPasswordValid = await bcryptjs.compare(password.trim(), user.password);
-
-    console.log("Password from request:", password.trim());
-    console.log("Hashed password from DB:", user.password);
-    console.log("Password match:", isPasswordValid);
+    // Ensures we have a Validated password
+    const isPasswordValid = await bcryptjs.compare(password, user.password);
 
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Generate JWT token
+    // Logic to generate JWT token
     const token = generateToken(user);
 
     res.json({

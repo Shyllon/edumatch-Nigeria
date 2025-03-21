@@ -1,23 +1,16 @@
 const jwt = require("jsonwebtoken");
-const User = require("./models/User");
-const redis = require("../config/redisClient"); // Import Redis client
+const User = require("../models/user"); 
 
-// Protect Routes (Check Token & Blacklist)
+// Protect Routes (Check Token)
 exports.protect = async (req, res, next) => {
   let token = req.header("Authorization");
 
   if (!token || !token.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Not authorized, no token" });
+    return res.status(401).json({ message: "Not authorized, no token provided" });
   }
 
   try {
     token = token.split(" ")[1]; // Extract actual token
-
-    // Check if token is blacklisted
-    const isBlacklisted = await redis.get(token);
-    if (isBlacklisted) {
-      return res.status(401).json({ message: "Token has been revoked" });
-    }
 
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -25,9 +18,14 @@ exports.protect = async (req, res, next) => {
     // Attach user info (excluding password)
     req.user = await User.findById(decoded.id).select("-password");
 
+    if (!req.user) {
+      return res.status(401).json({ message: "User no longer exists" });
+    }
+
     next();
   } catch (error) {
-    res.status(401).json({ message: "Invalid token" });
+    console.error("Auth Middleware Error:", error.message);
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
 
