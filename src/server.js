@@ -16,11 +16,12 @@ connectDB();
 app.use(
   cors({
     origin: [
-      "https://*.vercel.app",  // This allows all Vercel subdomains after making changes to the frontend
+      "https://edumatch-ashen.vercel.app",
+      "https://edumatch-afolabis-projects-1aa36ae8.vercel.app",
       "http://localhost:3000"
     ],
     methods: "GET, POST, PUT, DELETE",
-    credentials: true, 
+    credentials: true,
   })
 );
 
